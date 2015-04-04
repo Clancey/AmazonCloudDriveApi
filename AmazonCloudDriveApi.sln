@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonCloudDriveApi", "AmazonCloudDriveApi\AmazonCloudDriveApi.csproj", "{BD05395D-04E4-44C9-BAA3-5A0D0715BFD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonCloudDriveApi.iOS", "AmazonCloudDriveApi.iOS\AmazonCloudDriveApi.iOS.csproj", "{C8939774-A972-4C2C-90BE-8BA4171B0A3E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD05395D-04E4-44C9-BAA3-5A0D0715BFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD05395D-04E4-44C9-BAA3-5A0D0715BFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD05395D-04E4-44C9-BAA3-5A0D0715BFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD05395D-04E4-44C9-BAA3-5A0D0715BFD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

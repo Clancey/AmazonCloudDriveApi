@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{6E62494E-C36B-4465-800D-BB6DE6D80758}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonCloudDriveApi.iOS", "src\AmazonCloudDriveApi.iOS\AmazonCloudDriveApi.iOS.csproj", "{C8939774-A972-4C2C-90BE-8BA4171B0A3E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AmazonCloudDriveApi.Shared", "src\AmazonCloudDriveApi\AmazonCloudDriveApi.Shared\AmazonCloudDriveApi.Shared.shproj", "{12FDC81B-7E71-4D14-93B0-9B0908678DF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSSample", "samples\iOSSample\iOSSample.csproj", "{67875A62-21D2-452F-B0B5-2B902D109487}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Release|iPhone = Release|iPhone
+		Ad-Hoc|iPhone = Ad-Hoc|iPhone
+		AppStore|iPhone = AppStore|iPhone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Debug|iPhone.Build.0 = Debug|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Release|iPhone.ActiveCfg = Release|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Release|iPhone.Build.0 = Release|iPhone
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{67875A62-21D2-452F-B0B5-2B902D109487}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Release|iPhone.Build.0 = Release|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8939774-A972-4C2C-90BE-8BA4171B0A3E} = {6E62494E-C36B-4465-800D-BB6DE6D80758}
+		{12FDC81B-7E71-4D14-93B0-9B0908678DF3} = {6E62494E-C36B-4465-800D-BB6DE6D80758}
+	EndGlobalSection
+EndGlobal

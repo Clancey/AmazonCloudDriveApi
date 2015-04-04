@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{12FDC81B-7E71-4D14-93B0-9B0908678DF3}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Amazon.CloudDrive</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Amazon\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Amazon\AmazonApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Amazon\AmazonAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Amazon\ApiResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Amazon\OauthResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MimeTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\CloudDriveApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Requests\CloudChangesRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\CloudDriveDesktop.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\CloudDriveFilesProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\CloudDriveStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\CloudNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Requests\CloudNodeRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\ContentNodeImageProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\ContentNodeProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\ContentNodeVideoProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\ContentExtensionFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\ContentNameFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\ContentTypeFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\DateTimeBetweenNodeFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\DateTimeNodeFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Requests\FileUploadData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\NodeFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\NodeFilterGroup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\NodeOrderBy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\NodeProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\NodeTypeFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\ParentMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Requests\CloudNodeRequests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudEndpointResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudAccountInfoResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudQuotaResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudUsageResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudDataUsage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudDataTotals.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Changes\CloudChangesResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Amazon\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Requests\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Models\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Account\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Changes\" />
+  </ItemGroup>
+</Project>
