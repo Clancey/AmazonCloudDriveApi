@@ -26,6 +26,9 @@ namespace Amazon
 
 		[JsonProperty("access_token")]
 		public string AccessToken {get;set;}
+
+		[JsonProperty("id_token")]
+		public string Id { get; set; }
 	}
 }
 

@@ -9,11 +9,8 @@
     <Import_RootNamespace>Amazon.CloudDrive</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Amazon\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Amazon\AmazonApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Amazon\AmazonAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Amazon\ApiResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Amazon\OauthResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MimeTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\CloudDriveApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Enums.cs" />
@@ -46,6 +43,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudDataUsage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Account\CloudDataTotals.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CloudDrive\Changes\CloudChangesResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\Api.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\ApiResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\Authenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\JSonExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\OAuthAccount.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Api\OauthResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Amazon\" />
@@ -56,5 +60,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Nodes\Filters\" />
     <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Account\" />
     <Folder Include="$(MSBuildThisFileDirectory)CloudDrive\Changes\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Api\" />
   </ItemGroup>
 </Project>

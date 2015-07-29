@@ -50,7 +50,7 @@ namespace iOSSample
 			Root = new RootElement ("Cloud Drive") {
 				new Section(){
 					new StringElement("Sign in",async ()=>{
-						var account = await Api.Authenticate("Userid");
+						var account = await Api.Authenticate();
 						new UIAlertView("Logged in",account.ToString(),null,"Ok").Show();
 					}),
 					new StringElement("Get Account Info",async ()=>{

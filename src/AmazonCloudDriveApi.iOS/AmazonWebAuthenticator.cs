@@ -3,13 +3,16 @@ using UIKit;
 using CoreGraphics;
 using Foundation;
 using System.Threading.Tasks;
+using System.Net;
+using System.Linq;
 
 namespace Amazon.iOS
 {
-	public class AmazonWebAuthenticator : UIViewController
+
+	public class WebAuthenticator : UIViewController
 	{
-		
-		public readonly AmazonAuthenticator Authenticator;
+
+		public readonly Authenticator Authenticator;
 
 
 		UIWebView webView;
@@ -22,7 +25,7 @@ namespace Amazon.iOS
 
 		bool keepTryingAfterError = true;
 
-		public AmazonWebAuthenticator (AmazonAuthenticator authenticator)
+		public WebAuthenticator (Authenticator authenticator)
 		{
 			this.Authenticator = authenticator;
 			MonitorAuthenticator ();
@@ -31,8 +34,7 @@ namespace Amazon.iOS
 			//
 			Title = authenticator.Title;
 
-			if (authenticator.AllowsCancel)
-			{
+			if (authenticator.AllowsCancel) {
 				NavigationItem.LeftBarButtonItem = new UIBarButtonItem (
 					UIBarButtonSystemItem.Cancel,
 					delegate {
@@ -45,7 +47,13 @@ namespace Amazon.iOS
 				activityStyle = UIActivityIndicatorViewStyle.Gray;
 
 			activity = new UIActivityIndicatorView (activityStyle);
-			NavigationItem.RightBarButtonItem = new UIBarButtonItem (activity);
+			NavigationItem.RightBarButtonItems = new [] {
+
+				#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				new UIBarButtonItem (UIBarButtonSystemItem.Refresh, (s, e) => BeginLoadingInitialUrl ()),
+				#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+				new UIBarButtonItem (activity),
+			};
 
 			webView = new UIWebView (View.Bounds) {
 				Delegate = new WebViewDelegate (this),
@@ -57,39 +65,69 @@ namespace Amazon.iOS
 			//
 			// Locate our initial URL
 			//
+			#pragma warning disable 4014
 			BeginLoadingInitialUrl ();
+			#pragma warning restore 4014
 		}
-		async Task MonitorAuthenticator()
+
+		async Task MonitorAuthenticator ()
 		{
-//			try{
-				await Authenticator.GetToken();
-				if(Authenticator.HasCompleted)
-					await this.DismissViewControllerAsync(true);
-//			}
-//			catch(Exception ex) {
-//				Console.WriteLine (ex);
-//			}
+			try{
+				await Authenticator.GetAuthCode ();
+				if (Authenticator.HasCompleted)
+					await this.DismissViewControllerAsync (true);
+			}
+			catch(Exception ex) {
+				Console.WriteLine (ex);
+			}
 		}
 
 		void Cancel ()
 		{
+			this.DismissViewControllerAsync (true);
 			Authenticator.OnCancelled ();
 		}
-		static void ClearCookies()
+
+		static void ClearCookies ()
 		{
+			foreach(var cookie in NSHttpCookieStorage.SharedStorage.Cookies)
+				NSHttpCookieStorage.SharedStorage.DeleteCookie(cookie);	
+		}
+
+		Task loadingTask;
+
+		async Task BeginLoadingInitialUrl ()
+		{
+			if (this.Authenticator.ClearCookiesBeforeLogin)
+				ClearCookies ();
+			if (loadingTask == null || loadingTask.IsCompleted) {
+				loadingTask = RealLoading ();
+			}
+			await loadingTask;
+
 
 		}
 
-		void BeginLoadingInitialUrl ()
+		async Task RealLoading ()
 		{
+			activity.StartAnimating ();
 			if (this.Authenticator.ClearCookiesBeforeLogin)
-				ClearCookies();
+				ClearCookies ();
 
 			//
 			// Begin displaying the page
 			//
-			LoadInitialUrl(Authenticator.GetInitialUrl());
-
+			try {
+				var url = await Authenticator.GetInitialUrl ();
+				if (url == null)
+					return;
+				LoadInitialUrl (url);
+			} catch (Exception ex) {
+				Console.WriteLine (ex);
+				return;
+			} finally {
+				activity.StopAnimating ();
+			}
 		}
 
 		void LoadInitialUrl (Uri url)
@@ -105,16 +143,19 @@ namespace Amazon.iOS
 					completion: null);
 			}
 
-			if (url != null) {
-				var request = new NSUrlRequest (new NSUrl (url.AbsoluteUri));
-				NSUrlCache.SharedCache.RemoveCachedResponse (request); // Always try
-				webView.LoadRequest (request);
-			}
+			if (url == null)
+				return;
+
+			var request = new NSUrlRequest (new NSUrl (url.AbsoluteUri));
+			NSUrlCache.SharedCache.RemoveCachedResponse (request); // Always try
+			webView.LoadRequest (request);
 		}
 
 		void HandleBrowsingCompleted (object sender, EventArgs e)
 		{
-			if (!webViewVisible) return;
+			activity.StopAnimating ();
+			if (!webViewVisible)
+				return;
 
 			if (authenticatingView == null) {
 				authenticatingView = new UIView (View.Bounds) {
@@ -128,8 +169,7 @@ namespace Amazon.iOS
 				f.Y = (b.Height - f.Height) / 2;
 				progress.Frame = f;
 				authenticatingView.Add (progress);
-			}
-			else {
+			} else {
 				authenticatingView.Frame = View.Bounds;
 			}
 
@@ -148,15 +188,15 @@ namespace Amazon.iOS
 		protected class WebViewDelegate : UIWebViewDelegate
 		{
 			WeakReference controller;
-			protected AmazonWebAuthenticator Controller
-			{
-				get{ return controller == null ? null : controller.Target as AmazonWebAuthenticator; }
+
+			protected WebAuthenticator Controller {
+				get{ return controller == null ? null : controller.Target as WebAuthenticator; }
 				set { controller = new WeakReference (value); }
 			}
 
 			Uri lastUrl;
 
-			public WebViewDelegate (AmazonWebAuthenticator controller)
+			public WebViewDelegate (WebAuthenticator controller)
 			{
 				this.Controller = controller;
 			}
@@ -168,7 +208,7 @@ namespace Amazon.iOS
 				if (nsUrl != null && !Controller.Authenticator.HasCompleted) {
 					Uri url;
 					if (Uri.TryCreate (nsUrl.AbsoluteString, UriKind.Absolute, out url)) {
-						Controller.Authenticator.CheckUrl (url);
+						Controller.Authenticator.CheckUrl (url, GetCookies (url));
 					}
 				}
 
@@ -203,8 +243,15 @@ namespace Amazon.iOS
 				var url = new Uri (webView.Request.Url.AbsoluteString);
 				if (url != lastUrl && !Controller.Authenticator.HasCompleted) {
 					lastUrl = url;
-					Controller.Authenticator.CheckUrl (url);
+					Controller.Authenticator.CheckUrl (url, GetCookies (url));
 				}
+			}
+
+			private Cookie[] GetCookies (Uri url)
+			{
+				var store = NSHttpCookieStorage.SharedStorage;
+				var cookies = store.CookiesForUrl (new NSUrl (url.AbsoluteUri)).Select (x => new Cookie (x.Name, x.Value, x.Path, x.Domain)).ToArray ();
+				return cookies;
 			}
 		}
 	}

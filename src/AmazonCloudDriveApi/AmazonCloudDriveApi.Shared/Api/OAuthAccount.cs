@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Amazon
 {
-	public class Account
-	{
-		public Account ()
-		{
-			Scope = new string[0];
-			UserData = new Dictionary<string, string> ();
-		}
-
-		public string Identifier { get; set; }
-
+    public class OAuthAccount : Account
+    {
 		string tokenType;
-		public string TokenType {
-			get {
+		public string TokenType
+		{
+			get
+			{
 				return tokenType;
 			}
-			set {
+			set
+			{
 				if (value == "bearer")
 					value = "Bearer";
 				tokenType = value;
@@ -34,19 +29,16 @@ namespace Amazon
 		//UTC Datetime created
 		public DateTime Created { get; set; }
 
-		public string[] Scope { get; set; }
+		public string[] Scope { get; set; } = new string [0];
 
 		public string ClientId { get; set; }
 
-		public Dictionary<string,string> UserData { get; set; }
-
-		public bool IsValid ()
-		{
-			if (string.IsNullOrWhiteSpace (Token))
+	    public override bool IsValid()
+	    {
+			if (string.IsNullOrWhiteSpace(Token) || string.IsNullOrWhiteSpace(RefreshToken))
 				return false;
-			var expireTime = Created.AddSeconds (ExpiresIn);
+			var expireTime = Created.AddSeconds(ExpiresIn);
 			return expireTime > DateTime.UtcNow;
 		}
-	}
+    }
 }
-

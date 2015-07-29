@@ -7,51 +7,53 @@ using System.Web;
 
 namespace Amazon.CloudDrive
 {
+
 	public class CloudDriveApi : AmazonApi
 	{
 		const string RootUrl =  "https://drive.amazonaws.com/drive/v1";
 		public string ContentUrl { get; set; }
 		public string MetaUrl { get; set; }
-		public CloudDriveApi (string clientId,string clientSecret,HttpMessageHandler handler = null) : base(clientId,clientSecret,handler)
+
+		public CloudDriveApi (string identifier,string clientId,string clientSecret,HttpMessageHandler handler = null) : base(identifier,clientId,clientSecret,handler)
 		{
 			SetEndpoint(RootUrl);
 		}
 
-		public async Task<Account> Authenticate(string identifer)
+		public override async Task<Account> Authenticate()
 		{
-			return await Authenticate (identifer, new string[]{"clouddrive:read","clouddrive:write"});
+			return await Authenticate (new string[]{"clouddrive:read","clouddrive:write"});
 		}
 
 		protected override async Task OnAccountUpdated(Account account)
 		{
-//			try{
-				const string contentUrlKey = "CloudDriveEndpointContent";
-				const string metaUrlKey = "CloudDriveEndpointMeta";
-				const string expirationKey = "CloudDriveEndpointExpiration";
-				//Amazon gives users specific endpoints to hit. Check the cache and see if its valid.
-				string endpoint;
-				if (account.UserData.TryGetValue (contentUrlKey, out endpoint)) {
-					var expires = DateTime.Parse(account.UserData [expirationKey]);
-					if (expires > DateTime.Today) {
-						ContentUrl = endpoint;
-						MetaUrl = account.UserData[metaUrlKey];
-						return;
-					}
+			//			try{
+			const string contentUrlKey = "CloudDriveEndpointContent";
+			const string metaUrlKey = "CloudDriveEndpointMeta";
+			const string expirationKey = "CloudDriveEndpointExpiration";
+			//Amazon gives users specific endpoints to hit. Check the cache and see if its valid.
+			string endpoint;
+			if (account.UserData.TryGetValue (contentUrlKey, out endpoint)) {
+				var expires = DateTime.Parse(account.UserData [expirationKey]);
+				if (expires > DateTime.Today) {
+					ContentUrl = endpoint;
+					MetaUrl = account.UserData[metaUrlKey];
+					return;
 				}
-//
-				var accountData = await GetEndpoint();
-				if(accountData.HasError)
-					throw new Exception(accountData.ErrorDescription);
+			}
+			//
+			var accountData = await GetEndpoint();
+			if(accountData.HasError)
+				throw new Exception(accountData.ErrorDescription);
 
-				//It is reccomended you keep them for 3-5 days;
-				ContentUrl = account.UserData[contentUrlKey] = accountData.ContentUrl;
-				MetaUrl = account.UserData[metaUrlKey] = accountData.MetadataUrl;
-				account.UserData [expirationKey] = DateTime.Today.AddDays(4).ToShortDateString();
-				SaveAccount(account);
-//			}
-//			catch(Exception ex) {
-//				Console.WriteLine (ex);
-//			}
+			//It is reccomended you keep them for 3-5 days;
+			ContentUrl = account.UserData[contentUrlKey] = accountData.ContentUrl;
+			MetaUrl = account.UserData[metaUrlKey] = accountData.MetadataUrl;
+			account.UserData [expirationKey] = DateTime.Today.AddDays(4).ToShortDateString();
+			SaveAccount(account);
+			//			}
+			//			catch(Exception ex) {
+			//				Console.WriteLine (ex);
+			//			}
 		}
 		static string CreateUrl(string root, string path = "")
 		{
@@ -73,7 +75,7 @@ namespace Amazon.CloudDrive
 			var url = CreateUrl (string.IsNullOrEmpty (ContentUrl) ? RootUrl : ContentUrl, path);
 			return url;
 		}
-#region API Calls
+		#region API Calls
 
 		#region Accounts
 		public async Task<CloudAccountInfoResponse> GetAccountInfo()
@@ -149,7 +151,7 @@ namespace Amazon.CloudDrive
 			const string path = "nodes";
 			var query = request.ToString ();
 			var url = Path.Combine (CreateMetaUrl (path), query);
-//			var data = await GetString (url);
+			//			var data = await GetString (url);
 			return await this.Get<CloudNodeResponse> (url);
 		}
 
@@ -212,7 +214,7 @@ namespace Amazon.CloudDrive
 					ErrorDescription = ex.Message.ToString(),
 				};
 			}
-				
+
 		}
 		#endregion //Nodes
 
@@ -254,7 +256,7 @@ namespace Amazon.CloudDrive
 
 		#endregion //Trash
 
-#endregion// API Calls
+		#endregion// API Calls
 	}
 }
 
