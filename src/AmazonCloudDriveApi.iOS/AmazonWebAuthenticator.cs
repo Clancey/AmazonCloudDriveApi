@@ -5,6 +5,7 @@ using Foundation;
 using System.Threading.Tasks;
 using System.Net;
 using System.Linq;
+using SimpleAuth;
 
 namespace Amazon.iOS
 {

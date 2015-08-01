@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.IO;
 using System.Text;
 using System.Web;
+using SimpleAuth.Providers;
+using SimpleAuth;
 
 namespace Amazon.CloudDrive
 {

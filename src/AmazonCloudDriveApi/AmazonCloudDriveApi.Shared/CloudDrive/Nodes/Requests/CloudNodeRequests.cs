@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using Newtonsoft.Json;
+using SimpleAuth;
 
 namespace Amazon.CloudDrive
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using SimpleAuth;
 
 namespace Amazon.CloudDrive
 {
