@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using SimpleAuth;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Amazon.CloudDrive
 {
@@ -10,9 +12,11 @@ namespace Amazon.CloudDrive
 
 		public string Checkpoint { get; set; }
 
-		public List<CloudNode> Nodes { get; set; }
+		public List<JObject> Nodes { get; set; }
 
 		public int StatusCode { get; set; }
+
+        public bool End { get; set; }
 	}
 }
 

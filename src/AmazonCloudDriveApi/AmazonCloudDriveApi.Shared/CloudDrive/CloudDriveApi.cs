@@ -6,6 +6,8 @@ using System.Text;
 using System.Web;
 using SimpleAuth.Providers;
 using SimpleAuth;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Amazon.CloudDrive
 {
@@ -188,37 +190,50 @@ namespace Amazon.CloudDrive
 			return node.TempLink;
 		}
 
-		public async Task<CloudChangesResult> GetChanges(CloudChangesRequest parameters = null)
-		{
-			const string path = "changes";
-			try{
-				var url = CreateMetaUrl (path);
-				var postData = parameters == null || parameters.IsEmpty () ? "" : this.SerializeObject (parameters);
-				var message = await PostMessage (url, new StringContent (postData, Encoding.UTF8, "text/json"));
-				var data = await message.Content.ReadAsStringAsync ();
-				bool hasMore = false;
+	    public async Task<bool> GetChanges(Func<CloudChangesResponse, bool> callback, CloudChangesRequest parameters = null)
+	    {
+	        const string path = "changes";
 
-				//Amazon sends horribly ugly/bad json format. It's actually 2 sets of json...
-				//To properly deseralize the data, you need to remove the bad data.
-				if (data.EndsWith ("{\"end\":true}")) {
-					data = data.Replace ("{\"end\":true}", "");
-					hasMore = false;
-				} else if (data.EndsWith ("{\"end\":false}")) {
-					data = data.Replace ("{\"end\":false}", "");
-					hasMore = true;
-				}
-				var result = Deserialize<CloudChangesResult> (data);
-				return result;
-			}
-			catch(Exception ex) {
-				return new CloudChangesResult {
-					Error = ex.ToString(),
-					ErrorDescription = ex.Message.ToString(),
-				};
-			}
+	        var url = CreateMetaUrl(path);
+	        var postData = parameters == null || parameters.IsEmpty() ? "" : this.SerializeObject(parameters);
+	        var message = await PostMessage(url, new StringContent(postData, Encoding.UTF8, "text/json"));
 
-		}
-		#endregion //Nodes
+	        var contentBytes = await message.Content.ReadAsByteArrayAsync();
+	        using (var content = new MemoryStream(contentBytes))
+	        using (var textReader = new CloudChangesStream(content))
+	        {
+	            while (!textReader.EndOfStream)
+	            {
+	                var jsonReader = textReader.GetJsonTextReader();
+	                var serializer = new JsonSerializer();
+
+	                while (jsonReader.Read())
+	                {
+	                    if (jsonReader.TokenType == JsonToken.StartObject)
+	                    {
+	                        try
+	                        {
+	                            var result = serializer.Deserialize<CloudChangesResult>(jsonReader);
+
+	                            if (result.End)
+	                                return true;
+
+	                            callback(result);
+	                            break;
+	                        }
+	                        catch (Exception exc)
+	                        {
+	                            return false;
+	                        }
+	                    }
+	                }
+	            }
+	        }
+
+	        return false;
+	    }
+
+	    #endregion //Nodes
 
 		#region Trash
 		public async Task<bool> AddToTrash(CloudNode node)
