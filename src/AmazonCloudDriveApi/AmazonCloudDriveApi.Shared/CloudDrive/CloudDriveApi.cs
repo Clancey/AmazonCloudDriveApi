@@ -6,6 +6,8 @@ using System.Text;
 using System.Web;
 using SimpleAuth.Providers;
 using SimpleAuth;
+using System.Collections.Generic;
+using System.IO.Compression;
 
 namespace Amazon.CloudDrive
 {
@@ -187,37 +189,56 @@ namespace Amazon.CloudDrive
 			var node = await GetNode (id);
 			return node.TempLink;
 		}
-
-		public async Task<CloudChangesResult> GetChanges(CloudChangesRequest parameters = null)
+		public async Task<CloudChangeResult> GetChanges(CloudChangesRequest parameters = null)
 		{
 			const string path = "changes";
 			try{
+
 				var url = CreateMetaUrl (path);
 				var postData = parameters == null || parameters.IsEmpty () ? "" : this.SerializeObject (parameters);
 				var message = await PostMessage (url, new StringContent (postData, Encoding.UTF8, "text/json"));
-				var data = await message.Content.ReadAsStringAsync ();
-				bool hasMore = false;
-
-				//Amazon sends horribly ugly/bad json format. It's actually 2 sets of json...
-				//To properly deseralize the data, you need to remove the bad data.
-				if (data.EndsWith ("{\"end\":true}")) {
-					data = data.Replace ("{\"end\":true}", "");
-					hasMore = false;
-				} else if (data.EndsWith ("{\"end\":false}")) {
-					data = data.Replace ("{\"end\":false}", "");
-					hasMore = true;
-				}
-				var result = Deserialize<CloudChangesResult> (data);
+				var stream = await message.Content.ReadAsStreamAsync();
+				var gZip = new GZipStream(stream,CompressionMode.Decompress);
+				var result = new CloudChangeResult{
+					HasMore = true,
+				};
+				Task.Run(()=>ReadChanges(gZip,result));
 				return result;
+
 			}
 			catch(Exception ex) {
-				return new CloudChangesResult {
+				return new CloudChangeResult {
 					Error = ex.ToString(),
 					ErrorDescription = ex.Message.ToString(),
 				};
 			}
-
 		}
+
+		protected void ReadChanges(Stream stream, CloudChangeResult result)
+		{
+			try{
+				using(var reader = new StreamReader(stream, Encoding.UTF8))
+				{
+					while(!reader.EndOfStream){
+						var line = reader.ReadLine();
+						if (line.StartsWith ("{\"end\"")) {
+							result.AddResults (new List<CloudNode> (), false);
+							return;
+						}
+						var data = Deserialize<CloudChangesResultData> (line);
+						if (data.HasError) {
+							result.SetError (data.StatusCode, data.Error, data.ErrorDescription);
+							return;
+						}
+						result.AddResults(data.Nodes,true);
+					}
+				}
+			}
+			catch(Exception ex) {
+				result.SetError (ex);
+			}
+		}
+
 		#endregion //Nodes
 
 		#region Trash

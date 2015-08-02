@@ -46,7 +46,7 @@ namespace iOSSample
 		public CloudDriveApi Api;
 		public RootViewController() : base(null)
 		{
-			Api = new CloudDriveApi ("ClientID", "ClientSecret");
+			Api = new CloudDriveApi ("amazon-cloud-drive","ClientID", "ClientSecret");
 			Root = new RootElement ("Cloud Drive") {
 				new Section(){
 					new StringElement("Sign in",async ()=>{
@@ -75,8 +75,21 @@ namespace iOSSample
 						var upload  = await Api.UploadFile(new FileUploadData(file),file);
 						Console.WriteLine(upload);
 					}),
+					new StringElement("Get Changes",GetChanges),
 				},
 			};
+		}
+
+		public async void GetChanges()
+		{
+			var result = await Api.GetChanges ();
+			int totalCount = 0;
+			while (result.HasMore) {
+				var items = await result.LoadMoreNodes ();
+				totalCount += items?.Count ?? 0;
+				Console.WriteLine (items.Count);
+			}
+			Console.WriteLine ($"Finished collecting Changes - {totalCount}");
 		}
 	}
 }
