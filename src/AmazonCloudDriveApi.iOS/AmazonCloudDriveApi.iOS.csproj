@@ -39,7 +39,7 @@
       <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SimpleAuth.iOS">
-      <HintPath>..\..\packages\Clancey.SimpleAuth.1.0.2\lib\Xamarin.iOS10\SimpleAuth.iOS.dll</HintPath>
+      <HintPath>..\..\packages\Clancey.SimpleAuth.1.0.0\lib\Xamarin.iOS10\SimpleAuth.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
